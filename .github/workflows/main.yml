@@ -47,8 +47,8 @@ jobs:
         run: |
           mkdir export_data
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
-          #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
-          python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  Test1.ipynb Test2.ipynb
+          python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
+          #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  Test1.ipynb Test2.ipynb
       - name: check diff file is exists.
         run: |
           #ls ./export-dir/data/notebook.html
