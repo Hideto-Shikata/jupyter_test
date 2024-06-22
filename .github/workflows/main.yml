@@ -38,6 +38,8 @@ jobs:
         with:
           chrome-version: 126
           install-dependencies: true
+      - run: |
+          ${{ steps.setup-chrome.outputs.chrome-path }} --version
       #- name: Setup Chrome and ChromeDriver
       #  uses: ./.github/actions/setup-chrome
       - name: Install dependencies
