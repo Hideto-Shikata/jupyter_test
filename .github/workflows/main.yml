@@ -35,6 +35,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
         with:
           chrome-version: 126
           install-dependencies: true
