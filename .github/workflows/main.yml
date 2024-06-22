@@ -51,7 +51,8 @@ jobs:
       #- name: Install package
       #  run: |
       #    pip install .
-      - name: run
+      - name: diff notebooks
+        id: make-notebooks-diff
         run: |
           mkdir export_data
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
@@ -64,3 +65,8 @@ jobs:
         run: |
           #ls ./export-dir/data/notebook.html
           ls ./export_data/Test1.html
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: diff-notebooks
+          path: ${{steps.make-notebooks-diff.outputs.export_dir}}
