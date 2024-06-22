@@ -65,8 +65,8 @@ jobs:
         run: |
           #ls ./export-dir/data/notebook.html
           ls ./export_data/Test1.html
-      - name: upload artifact
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
-          name: diff-notebooks
-          path: ${{steps.make-notebooks-diff.outputs.export_dir}}
+          name: upload artifact
+          #path: ${{steps.make-notebooks-diff.outputs.export_dir}}
+          path: ./export_data/Test1.html
