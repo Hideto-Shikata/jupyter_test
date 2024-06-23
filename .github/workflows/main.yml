@@ -34,25 +34,25 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: browser-actions/setup-chrome@v1
-        id: setup-chrome
-        with:
-          chrome-version: 126
-          install-dependencies: true
-      - run: |
-          ${{ steps.setup-chrome.outputs.chrome-path }} --version
-      #- name: Setup Chrome and ChromeDriver
-      #  uses: ./.github/actions/setup-chrome
+      #- uses: browser-actions/setup-chrome@v1
+      #  id: setup-chrome
+      #  with:
+      #    chrome-version: 126
+      #    install-dependencies: true
+      #- run: |
+      #    ${{ steps.setup-chrome.outputs.chrome-path }} --version
+      ##- name: Setup Chrome and ChromeDriver
+      ##  uses: ./.github/actions/setup-chrome
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install tox==3.26.0 pytest nbdime==4.0.1 selenium chromedriver_binary==126.0.6478.63.0 jupyter_server==2.12.5
           pip list
-      #- name: Install package
-      #  run: |
-      #    pip install .
+      ##- name: Install package
+      ##  run: |
+      ##    pip install .
       - name: diff notebooks
-        id: make-notebooks-diff
+        id: make-notebook-diffhtmls
         run: |
           mkdir export_data
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
@@ -61,12 +61,12 @@ jobs:
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser ${{ steps.setup-chrome.outputs.chrome-path }} origin/main origin/test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser disabled origin/main origin/test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser chrome origin/main origin/test Test1.ipynb
-      - name: check diff file is exists.
-        run: |
-          #ls ./export-dir/data/notebook.html
-          ls ./export_data/Test1.html
+      #- name: check diff file is exists.
+      #  run: |
+      #    #ls ./export-dir/data/notebook.html
+      #    ls ./export_data/Test1.html
       - uses: actions/upload-artifact@v3
         with:
-          name: diff_html
-          #path: ${{steps.make-notebooks-diff.outputs.export_dir}}
+          name: notebook_diffhtmls
+          #path: ${{steps.make-notebook-diffhtmls.outputs.export_dir}}
           path: ./export_data/Test1.html
