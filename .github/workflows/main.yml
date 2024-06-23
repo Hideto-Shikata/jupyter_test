@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Switch to previous commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}^1
       - name: Get diff files
@@ -53,7 +53,7 @@ jobs:
           diff_files=$(git diff --name-only HEAD^1 HEAD)
           echo "Diff files: $diff_files"
           # ここから先に差分ファイルに対する処理を記述
-          
+
   notebook_diff:
     runs-on: ubuntu-latest
     steps:
@@ -64,8 +64,8 @@ jobs:
           echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
           echo "GITHUB_HEAD_REF: ${GITHUB_HEAD_REF}"
           echo "GITHUB_REF_CONTEXT: ${GITHUB_REF_CONTEXT}"
-          diff_file=$(git show --name-only ${GITHUB_SHA})
-          echo "diff_file: $diff_file"
+          #diff_file=$(git show --name-only ${GITHUB_SHA})
+          #echo "diff_file: $diff_file"
 
       - name: Checkout source tree
         uses: actions/checkout@v4
