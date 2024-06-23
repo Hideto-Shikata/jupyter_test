@@ -47,11 +47,15 @@ jobs:
       - name: Switch to previous commit
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}^1
+          ref: ${{ github.sha }}
       - name: Get diff files
         run: |
-          diff_files=$(git diff --name-only HEAD^1 HEAD)
-          echo "Diff files: $diff_files"
+          diff_files=$(git diff --name-only HEAD ${{ env.BASE_BRANCH }} \
+            -- "${{ env.DIFF_PATH }}" | tr "\n" " ")
+          echo "# diff_files: ${diff_files}"
+
+          #diff_files=$(git diff --name-only HEAD^1 HEAD)
+          #echo "Diff files: $diff_files"
           # ここから先に差分ファイルに対する処理を記述
 
   notebook_diff:
