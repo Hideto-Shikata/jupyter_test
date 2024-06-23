@@ -96,9 +96,9 @@ jobs:
         run: |
           echo "# diff_files: ${{ env.diff_files }}"
           mkdir ${{ env.DIFF_ARTIFACT_DIR }}
-          python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
-            --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
-            ${{ env.diff_files }}
+          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
+          #  --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
+          #  ${{ env.diff_files }}
           for file in ${diff_files}; do
               python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
               --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
@@ -150,22 +150,22 @@ jobs:
       ##- name: Install package
       ##  run: |
       ##    pip install .
-      - name: diff notebooks
-        id: make-notebook-diffhtmls
-        run: |
-          mkdir ${{ env.DIFF_ARTIFACT_DIR }}
-          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} Test1.ipynb
-          python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${{ env.BASE_BRANCH }} origin/test Test1.ipynb
+      #- name: diff notebooks
+      #  id: make-notebook-diffhtmls
+      #  run: |
+      #    mkdir ${{ env.DIFF_ARTIFACT_DIR }}
+      #    #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} Test1.ipynb
+      #    python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${{ env.BASE_BRANCH }} origin/test Test1.ipynb
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser ${{ steps.setup-chrome.outputs.chrome-path }} origin/main origin/test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser disabled origin/main origin/test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser chrome origin/main origin/test Test1.ipynb
-      #- name: check diff file is exists.
-      #  run: |
-      #    #ls ./export-dir/data/notebook.html
-      #    ls ./export_data/Test1.html
-      - uses: actions/upload-artifact@v4
-        with:
-          name: notebook_diffhtmls
-          path: ./${{ env.DIFF_ARTIFACT_DIR }}/*
+      ##- name: check diff file is exists.
+      ##  run: |
+      ##    #ls ./export-dir/data/notebook.html
+      ##    ls ./export_data/Test1.html
+      #- uses: actions/upload-artifact@v4
+      #  with:
+      #    name: notebook_diffhtmls
+      #    path: ./${{ env.DIFF_ARTIFACT_DIR }}/*
