@@ -3,16 +3,22 @@ name: MakeDiff
 on:
   push:
     branches: [main]
+    paths: [ 'Notebook/**.ipynb' ]
   pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ main ]
+    paths: [ 'Notebook/**.ipynb' ]
 
 env:
   DIFF_CMD: ./Tool/nbdiff_web_exporter.py
-  DIFFHTML_DIR: diff_artifacts
+  DIFF_ARTIFACT_DIR: diff_artifacts
+  DIFF_PATH: 'Notebook/**.ipynb'
   PORT: 8080
   NBDIME_VER: 4.0.1 
   SELENIUM_VER: 4.22.0 
   CHROMDRIVER_BINARY_VER: 126.0.6478.63.0 
   JUPYTER_SERVER_VER: 2.12.5
+  BASE_BRANCH: main
 
 jobs:
   #build:
@@ -69,9 +75,9 @@ jobs:
       - name: diff notebooks
         id: make-notebook-diffhtmls
         run: |
-          mkdir ${{ env.DIFFHTML_DIR }}
-          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFFHTML_DIR }} --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} Test1.ipynb
-          python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFFHTML_DIR }} --port ${{ env.PORT }}  origin/main origin/test Test1.ipynb
+          mkdir ${{ env.DIFF_ARTIFACT_DIR }}
+          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} Test1.ipynb
+          python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} --port ${{ env.PORT }}  origin/${{ env.BASE_BRANCH }} origin/test Test1.ipynb
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser ${{ steps.setup-chrome.outputs.chrome-path }} origin/main origin/test Test1.ipynb
@@ -84,4 +90,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: notebook_diffhtmls
-          path: ./${{ env.DIFFHTML_DIR }}/*
+          path: ./${{ env.DIFF_ARTIFACT_DIR }}/*
