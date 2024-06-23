@@ -74,11 +74,6 @@ jobs:
           diff_files=$(git diff --name-only HEAD ${{ env.BASE_BRANCH }} -- "${{ env.DIFF_PATH }}" \
             | tr "\n" " ")
           echo "# diff_files: ${diff_files}"
-          ####
-          # ここから先に ${diff_files} を使った処理を記載
-          #npx textlint ${diff_files} --rule textlint-rule-no-dropping-the-ra          
-      - name: Install dependencies
-        run: |
           python -m pip install --upgrade pip
           pip install \
               nbdime==${{ env.NBDIME_VER }} \
@@ -87,11 +82,10 @@ jobs:
               jupyter_server==${{ env.JUPYTER_SERVER_VER }}
           pip install tox==3.26.0 pytest
           pip list
-      - name: diff notebooks
-        id: make-notebook-diffhtmls
-        run: |
           mkdir ${{ env.DIFF_ARTIFACT_DIR }}
           echo "# diff_files: ${diff_files}"
+          python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
+            --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} ${diff_files}
           for file in ${diff_files}; do
               python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
               --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} ${file}
