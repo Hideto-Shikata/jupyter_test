@@ -73,7 +73,15 @@ jobs:
         run: |
           diff_files=$(git diff --name-only HEAD ${{ env.BASE_BRANCH }} -- "${{ env.DIFF_PATH }}" \
             | tr "\n" " ")
-          echo "# diff_files: ${diff_files}"
+          echo "diff_files=${diff_files}" >> $GITHUB_ENV
+
+      - name: Checkout source tree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
           python -m pip install --upgrade pip
           pip install \
               nbdime==${{ env.NBDIME_VER }} \
@@ -82,13 +90,19 @@ jobs:
               jupyter_server==${{ env.JUPYTER_SERVER_VER }}
           pip install tox==3.26.0 pytest
           pip list
+
+      - name: diff notebooks
+        id: make-notebook-diffhtmls
+        run: |
+          echo "# diff_files: ${{ env.diff_files }}"
           mkdir ${{ env.DIFF_ARTIFACT_DIR }}
-          echo "# diff_files: ${diff_files}"
           python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
-            --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} ${diff_files}
+            --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
+            ${{ env.diff_files }}
           for file in ${diff_files}; do
               python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
-              --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} ${file}
+              --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
+              ${{ env.diff_files }}
           done
       - uses: actions/upload-artifact@v4
         with:
@@ -109,8 +123,8 @@ jobs:
           #diff_file=$(git show --name-only ${GITHUB_SHA})
           #echo "diff_file: $diff_file"
 
-      - name: Checkout source tree
-        uses: actions/checkout@v4
+          - name: Checkout source tree
+          uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # ref: ${{github.head_ref}} # For Pull Request
