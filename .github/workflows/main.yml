@@ -55,7 +55,7 @@ jobs:
         id: make-notebook-diffhtmls
         run: |
           mkdir diff_artifacts
-          python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  origin/main origin/test Test1.ipynb
+          python ./Tool/nbdiff_web_exporter.py --export-dir ./diff_artifacts --port 8080  origin/main origin/test Test1.ipynb
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080 --browser ${{ steps.setup-chrome.outputs.chrome-path }} origin/main origin/test Test1.ipynb
