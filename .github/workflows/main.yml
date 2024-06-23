@@ -67,11 +67,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Fetch base branch
-        run: git fetch origin ${base_branch}:${base_branch}
+        run: git fetch origin ${{ env.BASE_BRANCH }}:${{ env.BASE_BRANCH }}
 
       - name: Run actions using diff_files
         run: |
-          diff_files=$(git diff --name-only HEAD ${base_branch} -- "${diff_path}" \
+          diff_files=$(git diff --name-only HEAD ${{ env.BASE_BRANCH }} -- "${{ env.DIFF_PATH }}" \
             | tr "\n" " ")
           echo "# diff_files: ${diff_files}"
           ####
