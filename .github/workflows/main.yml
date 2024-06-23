@@ -9,6 +9,10 @@ env:
   DIFF_CMD: ./Tool/nbdiff_web_exporter.py
   DIFFHTML_DIR: diff_artifacts
   PORT: 8080
+  NBDIME_VER: 4.0.1 
+  SELENIUM_VER: 4.22.0 
+  CHROMDRIVER_BINARY_VER: 126.0.6478.63.0 
+  JUPYTER_SERVER_VER: 2.12.5
 
 jobs:
   #build:
@@ -51,7 +55,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install tox==3.26.0 pytest nbdime==4.0.1 selenium chromedriver_binary==126.0.6478.63.0 jupyter_server==2.12.5
+          pip install nbdime==${{ NBDIME_VER }} selenium==${{ SELENIUM_VER }} chromedriver_binary==${{ CHROMDRIVER_BINARY_VER }} jupyter_server==${{ JUPYTER_SERVER_VER }}
+          pip install tox==3.26.0 pytest
           pip list
       ##- name: Install package
       ##  run: |
