@@ -102,7 +102,7 @@ jobs:
           for file in ${{ env.diff_files }}; do
               sh "python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
               --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
-              ${file}"
+              ./${file}"
           done
       - uses: actions/upload-artifact@v4
         with:
