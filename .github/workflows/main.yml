@@ -77,7 +77,31 @@ jobs:
           ####
           # ここから先に ${diff_files} を使った処理を記載
           #npx textlint ${diff_files} --rule textlint-rule-no-dropping-the-ra          
-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+              nbdime==${{ env.NBDIME_VER }} \
+              selenium==${{ env.SELENIUM_VER }} \
+              chromedriver_binary==${{ env.CHROMDRIVER_BINARY_VER }} \
+              jupyter_server==${{ env.JUPYTER_SERVER_VER }}
+          pip install tox==3.26.0 pytest
+          pip list
+      - name: diff notebooks
+        id: make-notebook-diffhtmls
+        run: |
+          mkdir ${{ env.DIFF_ARTIFACT_DIR }}
+          echo "# diff_files: ${diff_files}"
+          for file in ${diff_files}; do
+              python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
+              --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} ${file}
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: notebook_diffhtmls
+          path: ./${{ env.DIFF_ARTIFACT_DIR }}/*
+  
+          
   notebook_diff:
     runs-on: ubuntu-latest
     steps:
