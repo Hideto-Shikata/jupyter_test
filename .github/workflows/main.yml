@@ -96,14 +96,12 @@ jobs:
         run: |
           echo "# diff_files: ${{ env.diff_files }}"
           mkdir ${{ env.DIFF_ARTIFACT_DIR }}
-          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
-          #  --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
-          #  ${{ env.diff_files }}
           for file in ${{ env.diff_files }}; do
               python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFF_ARTIFACT_DIR }} \
               --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} \
               ./${file}
           done
+          
       - uses: actions/upload-artifact@v4
         with:
           name: notebook_diffhtmls
