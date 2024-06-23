@@ -43,6 +43,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # ref: ${{github.head_ref}} # For Pull Request
       #- uses: browser-actions/setup-chrome@v1
       #  id: setup-chrome
       #  with:
@@ -55,7 +56,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nbdime==${{ env.NBDIME_VER }} selenium==${{ env.SELENIUM_VER }} chromedriver_binary==${{ env.CHROMDRIVER_BINARY_VER }} jupyter_server==${{ env.JUPYTER_SERVER_VER }}
+          pip install \
+              nbdime==${{ env.NBDIME_VER }} \
+              selenium==${{ env.SELENIUM_VER }} \
+              chromedriver_binary==${{ env.CHROMDRIVER_BINARY_VER }} \
+              jupyter_server==${{ env.JUPYTER_SERVER_VER }}
           pip install tox==3.26.0 pytest
           pip list
       ##- name: Install package
@@ -79,5 +84,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: notebook_diffhtmls
-          #path: ${{steps.make-notebook-diffhtmls.outputs.export_dir}}
           path: ./${{ env.DIFFHTML_DIR }}/*
