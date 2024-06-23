@@ -123,8 +123,8 @@ jobs:
           #diff_file=$(git show --name-only ${GITHUB_SHA})
           #echo "diff_file: $diff_file"
 
-          - name: Checkout source tree
-          uses: actions/checkout@v4
+      - name: Checkout source tree
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # ref: ${{github.head_ref}} # For Pull Request
