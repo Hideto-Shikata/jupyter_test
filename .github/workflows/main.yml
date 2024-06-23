@@ -3,7 +3,7 @@ name: MakeDiff
 on:
   push:
     branches: [main]
-    paths: [ 'Notebook/**.ipynb' ]
+    #paths: [ 'Notebook/**.ipynb' ]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ main ]
@@ -45,6 +45,13 @@ jobs:
   notebook_diff:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Env
+        run: |
+          echo "GITHUB_REF: ${GITHUB_REF}"
+          echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
+          echo "GITHUB_HEAD_REF: ${GITHUB_HEAD_REF}"
+          echo "GITHUB_REF_CONTEXT: ${GITHUB_REF_CONTEXT}"
+
       - name: Checkout source tree
         uses: actions/checkout@v4
         with:
