@@ -41,7 +41,19 @@ jobs:
   #    run: |
   #      python -m pip install --upgrade pip
   #      pip install tox==3.26.0 pytest nbdime==4.0.1
-
+  get-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Switch to previous commit
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}^1
+      - name: Get diff files
+        run: |
+          diff_files=$(git diff --name-only HEAD^1 HEAD)
+          echo "Diff files: $diff_files"
+          # ここから先に差分ファイルに対する処理を記述
+          
   notebook_diff:
     runs-on: ubuntu-latest
     steps:
