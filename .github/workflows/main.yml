@@ -1,4 +1,4 @@
-name: Tests
+name: MakeDiff
 
 on:
   push:
@@ -65,6 +65,7 @@ jobs:
         id: make-notebook-diffhtmls
         run: |
           mkdir ${{ env.DIFFHTML_DIR }}
+          #python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFFHTML_DIR }} --port ${{ env.PORT }}  origin/${GITHUB_BASE_REF} origin/${GITHUB_HEAD_REF} Test1.ipynb
           python ${{ env.DIFF_CMD }} --export-dir ./${{ env.DIFFHTML_DIR }} --port ${{ env.PORT }}  origin/main origin/test Test1.ipynb
           #nbdiff-web-exporter --export-dir ./export-dir --port 8080  origin/main origin/test-data data/notebook.ipynb
           #python ./Tool/nbdiff_web_exporter.py --export-dir ./export_data --port 8080  main test Test1.ipynb
@@ -79,4 +80,4 @@ jobs:
         with:
           name: notebook_diffhtmls
           #path: ${{steps.make-notebook-diffhtmls.outputs.export_dir}}
-          path: ./${{ env.DIFFHTML_DIR }}/Test1.html
+          path: ./${{ env.DIFFHTML_DIR }}/*
